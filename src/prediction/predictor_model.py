@@ -22,13 +22,13 @@ logger = get_logger(task_name="model_training")
 
 
 class Forecaster:
-    """A wrapper class for the Random Forest Forecaster.
+    """A wrapper class for the Forecaster model.
 
     This class provides a consistent interface that can be used with other
     Forecaster models.
     """
 
-    model_name = "Random Forest Forecaster"
+    model_name = "Ensemble Forecaster"
 
     def __init__(
         self,
@@ -38,7 +38,7 @@ class Forecaster:
         random_state: int = 0,
         **kwargs,
     ):
-        """Construct a new Random Forest Forecaster
+        """Construct a new Ensemble Forecaster
 
         Args:
 
