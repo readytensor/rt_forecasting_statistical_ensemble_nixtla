@@ -3,7 +3,6 @@ import warnings
 import joblib
 import numpy as np
 import pandas as pd
-from typing import Optional, Iterable, Union
 from schema.data_schema import ForecastingSchema
 from sklearn.exceptions import NotFittedError
 from statsforecast import StatsForecast
@@ -12,7 +11,6 @@ from statsforecast.models import (
     AutoETS,
     AutoCES,
     DynamicOptimizedTheta,
-    SeasonalNaive,
 )
 from logger import get_logger
 
@@ -35,6 +33,7 @@ class Forecaster:
     def __init__(
         self,
         data_schema: ForecastingSchema,
+        season_length: int,
         history_forecast_ratio: int = None,
         random_state: int = 0,
         **kwargs,
@@ -56,6 +55,7 @@ class Forecaster:
             **kwargs (dict): Additional parameters accepted by the forecaster.
         """
         self.data_schema = data_schema
+        self.season_length = season_length
         self.random_state = random_state
         self._is_trained = False
         self.kwargs = kwargs
@@ -67,10 +67,10 @@ class Forecaster:
             )
 
         self.models = [
-            AutoARIMA(),
-            AutoETS(),
-            AutoCES(),
-            DynamicOptimizedTheta(),
+            AutoARIMA(season_length=self.season_length),
+            AutoETS(season_length=self.season_length),
+            AutoCES(season_length=self.season_length),
+            DynamicOptimizedTheta(season_length=self.season_length),
         ]
 
         self.model = StatsForecast(
