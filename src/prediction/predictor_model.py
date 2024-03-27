@@ -67,10 +67,10 @@ class Forecaster:
             )
 
         self.models = [
-            # AutoARIMA(),
-            # AutoETS(),
+            AutoARIMA(),
+            AutoETS(),
             AutoCES(),
-            # DynamicOptimizedTheta(),
+            DynamicOptimizedTheta(),
         ]
 
         self.model = StatsForecast(
