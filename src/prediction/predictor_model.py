@@ -66,7 +66,7 @@ class Forecaster:
         if season_length is not None:
             self.season_length = season_length
         elif self.freq != 1:
-            self.season_length = get_seasonality(self.data_schema.frequency)
+            self.season_length = get_seasonality(self.freq)
         else:
             self.season_length = 1
 
