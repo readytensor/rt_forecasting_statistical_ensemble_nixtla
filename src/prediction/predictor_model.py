@@ -57,15 +57,18 @@ class Forecaster:
             **kwargs (dict): Additional parameters accepted by the forecaster.
         """
         self.data_schema = data_schema
-
         self.random_state = random_state
         self._is_trained = False
         self.kwargs = kwargs
         self.history_length = None
         self.freq = self.map_frequency(self.data_schema.frequency)
-        self.season_length = (
-            season_length if season_length is not None else get_seasonality(self.freq)
-        )
+
+        if season_length is not None:
+            self.season_length = season_length
+        elif self.freq != 1:
+            self.season_length = get_seasonality(self.data_schema.frequency)
+        else:
+            self.season_length = 1
 
         if history_forecast_ratio:
             self.history_length = (
