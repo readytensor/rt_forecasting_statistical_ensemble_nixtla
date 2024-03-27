@@ -42,8 +42,9 @@ class Forecaster:
 
         Args:
 
-            data_schema (ForecastingSchema):
-                Schema of training data.
+            data_schema (ForecastingSchema):Schema of training data.
+
+            season_length (int): The season length of the time series.
 
             history_forecast_ratio (int):
                 Sets the history length depending on the forecast horizon.
