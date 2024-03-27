@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from schema.data_schema import ForecastingSchema
 from sklearn.exceptions import NotFittedError
+from gluonts.time_feature.seasonality import get_seasonality
 from statsforecast import StatsForecast
 from statsforecast.models import (
     AutoARIMA,
@@ -33,7 +34,7 @@ class Forecaster:
     def __init__(
         self,
         data_schema: ForecastingSchema,
-        season_length: int,
+        season_length: int = None,
         history_forecast_ratio: int = None,
         random_state: int = 0,
         **kwargs,
@@ -56,11 +57,15 @@ class Forecaster:
             **kwargs (dict): Additional parameters accepted by the forecaster.
         """
         self.data_schema = data_schema
-        self.season_length = season_length
+
         self.random_state = random_state
         self._is_trained = False
         self.kwargs = kwargs
         self.history_length = None
+        self.freq = self.map_frequency(self.data_schema.frequency)
+        self.season_length = (
+            season_length if season_length is not None else get_seasonality(self.freq)
+        )
 
         if history_forecast_ratio:
             self.history_length = (
@@ -76,7 +81,7 @@ class Forecaster:
 
         self.model = StatsForecast(
             models=self.models,
-            freq=self.map_frequency(self.data_schema.frequency),
+            freq=self.freq,
         )
 
     def map_frequency(self, frequency: str) -> str:
