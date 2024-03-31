@@ -78,7 +78,7 @@ class Forecaster:
         self.models = [
             AutoARIMA(season_length=self.season_length),
             AutoETS(season_length=self.season_length),
-            AutoCES(season_length=self.season_length),
+            # AutoCES(season_length=self.season_length),
             DynamicOptimizedTheta(season_length=self.season_length),
         ]
 
