@@ -78,7 +78,7 @@ class Forecaster:
         self.models = [
             AutoARIMA(season_length=self.season_length),
             AutoETS(season_length=self.season_length),
-            # AutoCES(season_length=self.season_length),
+            AutoCES(season_length=self.season_length),
             DynamicOptimizedTheta(season_length=self.season_length),
         ]
 
@@ -89,7 +89,7 @@ class Forecaster:
 
     def map_frequency(self, frequency: str) -> str:
         """
-        Maps the frequency in the data schema to the frequency expected by mlforecast.
+        Maps the frequency in the data schema to the frequency expected by statsforecast.
 
         Args:
             frequency (str): The frequency from the schema.
@@ -150,6 +150,7 @@ class Forecaster:
                 all_series[index] = series.iloc[-self.history_length :]
             data = pd.concat(all_series).drop(columns="index")
 
+        data[self.data_schema.target] += 10
         return data
 
     def fit(
@@ -195,6 +196,7 @@ class Forecaster:
         ).mean(axis=1)
 
         forecast[self.data_schema.time_col] = test_data[self.data_schema.time_col]
+        forecast[prediction_col_name] -= 10
         return forecast
 
     def save(self, model_dir_path: str) -> None:
